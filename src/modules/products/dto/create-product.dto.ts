@@ -1,8 +1,8 @@
+import { Transform } from 'class-transformer';
 import {
   IsNotEmpty,
   IsNumber,
   IsString,
-  IsUrl,
   MaxLength,
   Min,
 } from 'class-validator';
@@ -12,15 +12,15 @@ export class CreateProductDto {
   @IsString()
   name: string;
 
+  @Transform(({ value }) => Number(value))
   @IsNotEmpty()
-  @IsNumber()
   @Min(0.01)
+  @IsNumber()
   price: number;
 
-  @IsNotEmpty()
-  @IsUrl()
   imageUrl: string;
 
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   @Min(0)
   quantity?: number;
