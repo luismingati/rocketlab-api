@@ -10,15 +10,25 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { ProductsService } from './services/products.service';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { CreateProductDto } from './dto/create-product.dto';
+import { SellProductDto } from './dto/sell-product.dto';
+import { SaleService } from './services/sale.service';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly saleService: SaleService,
+  ) {}
+
+  @Post('sell')
+  sell(@Body() sellProductDto: SellProductDto) {
+    return this.saleService.sell(sellProductDto);
+  }
 
   @Post()
   @UseInterceptors(
