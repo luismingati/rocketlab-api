@@ -1,16 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/shared/database/prisma.service';
 import { SellProductDto } from '../dto/sell-product.dto';
+import { ProductsRepository } from 'src/shared/database/products.repository';
+import { PrismaService } from 'src/shared/database/prisma.service';
 
 @Injectable()
 export class SaleService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly productsRepo: ProductsRepository,
+    private prisma: PrismaService,
+  ) {}
 
   async sell(sellProductDto: SellProductDto) {
     const { products } = sellProductDto;
 
     for (const product of products) {
-      const dbProduct = await this.prisma.product.findUnique({
+      const dbProduct = await this.productsRepo.findFirst({
         where: { id: product.id },
       });
 
@@ -21,7 +25,7 @@ export class SaleService {
 
     const sales = this.prisma.$transaction(
       products.map((product) =>
-        this.prisma.product.update({
+        this.productsRepo.update({
           where: { id: product.id },
           data: {
             quantity: {

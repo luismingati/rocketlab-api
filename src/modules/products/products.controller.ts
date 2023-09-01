@@ -9,6 +9,7 @@ import {
   Put,
   UploadedFile,
   UseInterceptors,
+  Patch,
 } from '@nestjs/common';
 import { ProductsService } from './services/products.service';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -25,7 +26,7 @@ export class ProductsController {
     private readonly saleService: SaleService,
   ) {}
 
-  @Post('sell')
+  @Patch('sell')
   sell(@Body() sellProductDto: SellProductDto) {
     return this.saleService.sell(sellProductDto);
   }
