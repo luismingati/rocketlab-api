@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsNotEmpty,
@@ -22,5 +23,6 @@ class ProductDto {
 export class SellProductDto {
   @IsArray()
   @ValidateNested({ each: true })
+  @Type(() => ProductDto)
   products: ProductDto[];
 }

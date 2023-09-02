@@ -46,8 +46,13 @@ export class ProductsController {
     @UploadedFile() file: Express.Multer.File,
     @Body() createProductDto: CreateProductDto,
   ) {
+    if (!file) {
+      throw new Error('Nenhuma imagem foi enviada!');
+    }
+
     const { name, description, price, quantity } = createProductDto;
-    const imageUrl = file.filename;
+    //trocar localhost por BASE_URL
+    const imageUrl = `http://localhost:3000/${file.filename}`;
 
     const transformedDto = {
       name,
