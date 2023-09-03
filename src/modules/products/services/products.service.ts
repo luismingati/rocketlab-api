@@ -29,20 +29,27 @@ export class ProductsService {
     });
   }
 
-  findOne(id: string) {
-    return this.productsRepo.findFirst({ where: { id } });
+  async findOne(id: string) {
+    await this.productsRepo.validateId(id);
+
+    const product = await this.productsRepo.findFirst({ where: { id: id } });
+    return product;
   }
 
-  update(id: string, updateProductDto: UpdateProductDto) {
+  async update(id: string, updateProductDto: UpdateProductDto) {
+    await this.productsRepo.validateId(id);
+
     const { name, description, price, imageUrl, quantity } = updateProductDto;
 
     return this.productsRepo.update({
-      where: { id },
+      where: { id: id },
       data: { name, description, price, imageUrl, quantity },
     });
   }
 
-  remove(id: string) {
-    this.productsRepo.delete({ where: { id } });
+  async remove(id: string) {
+    await this.productsRepo.validateId(id);
+
+    await this.productsRepo.delete({ where: { id: id } });
   }
 }

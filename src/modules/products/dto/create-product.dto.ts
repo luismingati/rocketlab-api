@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import {
+  IsInt,
   IsNotEmpty,
   IsNumber,
   IsString,
@@ -22,6 +23,7 @@ export class CreateProductDto {
 
   @Transform(({ value }) => Number(value))
   @IsNumber()
+  @IsInt()
   @Min(0)
   quantity?: number;
 

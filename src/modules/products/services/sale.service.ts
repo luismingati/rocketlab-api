@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { SellProductDto } from '../dto/sell-product.dto';
 import { ProductsRepository } from 'src/shared/database/products.repository';
 import { PrismaService } from 'src/shared/database/prisma.service';
@@ -14,12 +14,14 @@ export class SaleService {
     const { products } = sellProductDto;
 
     for (const product of products) {
+      await this.productsRepo.validateId(product.id);
+
       const dbProduct = await this.productsRepo.findFirst({
         where: { id: product.id },
       });
 
       if (dbProduct.quantity < product.quantity) {
-        throw new Error('Quantidade insuficiente');
+        throw new BadRequestException('Quantidade insuficiente');
       }
     }
 
